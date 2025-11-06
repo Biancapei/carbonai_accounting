@@ -9,11 +9,13 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: false
+        value: true
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
-        value: error
+        value: debug
+      - key: APP_URL
+        value: https://carbonai-accounting.onrender.com
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
