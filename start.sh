@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "=== Starting Laravel Application ==="
+
 # Generate APP_KEY first if not provided (before Laravel needs it)
 if [ -z "$APP_KEY" ]; then
     echo "APP_KEY not set, generating one..."
@@ -11,38 +13,60 @@ if [ -z "$APP_KEY" ]; then
 fi
 
 # Create .env file from environment variables
-echo "Setting up .env file..."
+echo "Creating .env file..."
 cat > .env << EOF
 APP_NAME=Laravel
 APP_ENV=${APP_ENV:-production}
 APP_KEY=${APP_KEY}
-APP_DEBUG=${APP_DEBUG:-false}
-APP_URL=${APP_URL:-http://localhost}
+APP_DEBUG=${APP_DEBUG:-true}
+APP_URL=${APP_URL:-https://carbonai-accounting.onrender.com}
 
 LOG_CHANNEL=${LOG_CHANNEL:-stderr}
-LOG_LEVEL=${LOG_LEVEL:-error}
+LOG_LEVEL=${LOG_LEVEL:-debug}
 
 DB_CONNECTION=${DB_CONNECTION:-pgsql}
-DB_HOST=${DB_HOST}
+DB_HOST=${DB_HOST:-localhost}
 DB_PORT=${DB_PORT:-5432}
-DB_DATABASE=${DB_DATABASE}
-DB_USERNAME=${DB_USERNAME}
-DB_PASSWORD=${DB_PASSWORD}
+DB_DATABASE=${DB_DATABASE:-laravel}
+DB_USERNAME=${DB_USERNAME:-postgres}
+DB_PASSWORD=${DB_PASSWORD:-}
 EOF
 
+echo "Environment variables set. Checking database connection..."
+
+# Wait a bit for database to be ready (if needed)
+sleep 2
+
 # Clear any cached config first
+echo "Clearing caches..."
 php artisan config:clear || true
 php artisan route:clear || true
 php artisan view:clear || true
+php artisan cache:clear || true
 
-# Cache configuration
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Test database connection
+echo "Testing database connection..."
+php artisan migrate:status || echo "Database connection test failed, but continuing..."
+
+# Don't cache config initially to avoid issues - let Laravel run without cache first
+# This helps with debugging. We can enable caching later once everything works.
+# php artisan config:cache || echo "Config cache failed, continuing without cache..."
+# php artisan route:cache || echo "Route cache failed, continuing without cache..."
+# php artisan view:cache || echo "View cache failed, continuing without cache..."
 
 # Run migrations
-php artisan migrate --force || true
+echo "Running migrations..."
+php artisan migrate --force || echo "Migrations failed, but continuing..."
 
-# Start server
-php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+# Ensure storage is writable
+echo "Setting storage permissions..."
+chmod -R 775 storage bootstrap/cache || true
+chown -R www-data:www-data storage bootstrap/cache || true
+
+echo "Starting Laravel server on port ${PORT:-8000}..."
+echo "APP_KEY is set: $([ -n "$APP_KEY" ] && echo 'YES' || echo 'NO')"
+echo "Database connection: DB_HOST=${DB_HOST}, DB_DATABASE=${DB_DATABASE}"
+
+# Start server with verbose output
+exec php artisan serve --host=0.0.0.0 --port=${PORT:-8000} --verbose
 
