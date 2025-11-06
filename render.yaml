@@ -13,7 +13,6 @@ services:
         value: stderr
       - key: LOG_LEVEL
         value: error
-      # Database connection - automatically connected from the database below
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -37,7 +36,6 @@ services:
           name: carbonai-db
           property: password
 
-# PostgreSQL Database
 databases:
   - name: carbonai-db
     plan: free
