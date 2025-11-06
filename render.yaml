@@ -1,9 +1,10 @@
 services:
   - type: web
     name: carbonai-accounting
+    runtime: docker
     plan: free
-    buildCommand: composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force
-    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
       - key: APP_ENV
         value: production
@@ -41,4 +42,3 @@ databases:
     plan: free
     databaseName: carbonai
     user: carbonai
-
