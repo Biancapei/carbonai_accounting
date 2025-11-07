@@ -66,7 +66,7 @@ body {
     font-size: .75rem;
 }
 
-.scope1 {
+.scope1, .location-based-total, .market-based-total, .scope2 {
     color: #111827;
     font-weight: 900;
     font-size: 1.5rem;
@@ -403,6 +403,8 @@ button.btn.btn-calculate,
     border-radius: 0.375rem;
     font-weight: 500;
     cursor: not-allowed !important;
+    display: flex;
+    align-items: center;
 }
 
 button.btn-calculate.btn-enabled,
@@ -530,6 +532,25 @@ button.btn.btn-calculate:not(:disabled),
     font-weight: 700;
 }
 
+.co2-location-based {
+    color: #111827 !important;
+}
+
+#supplierName {
+    display: block;
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+#supplierName::before {
+    content: '';
+}
+
+#doneManageCardsBtn:hover {
+    background-color: #0d9488 !important;
+}
+
 /* Methodology & Standards Card Styles */
 .methodology-card {
     max-width: 100%;
@@ -574,3 +595,31 @@ button.btn.btn-calculate:not(:disabled),
     line-height: 1.5;
 }
 
+/* Scope 2 */
+.scope2-total {
+    display: block !important;
+}
+
+.renewable-source {
+    background: #ecfdf5;
+    padding: 1rem;
+    border: 1px solid #bbf7d0;
+    border-radius: 15px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.certificate-section {
+    background: #f9fafb;
+}
+
+.add-cert-btn {
+    width: 100%;
+    border: 1px dotted #d1d5db;
+    padding: .5rem;
+    border-radius: 10px;
+}
+
+.table-cell-text span {
+    color: #6b7280; font-size: 0.875rem;
+}

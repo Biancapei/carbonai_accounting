@@ -32,11 +32,16 @@
 
     <!-- Overview Section -->
     <div class="overview px-8 py-6">
-        <h2 class="header">Overview</h2>
+        <div class="d-flex my-3" style="justify-content: space-between; align-items: center;">
+            <h2 class="header mb-0">Overview</h2>
+            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#manageCardsModal">
+                Manage Cards
+            </button>
+        </div>
         <div class="row g-3">
             <!-- Card 1: Total Scope 1 tCO₂e -->
             <div class="col-12 col-md-4">
-            <div class="card">
+            <div class="card" id="totalScope1Card">
                 <div class="top d-flex mb-2" style="flex-direction: row;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -63,7 +68,7 @@
 
             <!-- Card 2: Target vs Actual -->
             <div class="col-12 col-md-4">
-            <div class="card">
+            <div class="card" id="targetVsActualCard">
                 <div class="top d-flex mb-2" style="flex-direction: row;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -86,7 +91,7 @@
 
             <!-- Card 3: Intensity per Revenue -->
             <div class="col-12 col-md-4">
-            <div class="card">
+            <div class="card" id="intensityPerRevenueCard">
                 <div class="top d-flex mb-2" style="flex-direction: row;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -106,7 +111,7 @@
 
             <!-- Card 4: Data Confidence -->
             <div class="col-12 col-md-4">
-            <div class="card">
+            <div class="card" id="dataConfidenceCard">
                 <div class="top d-flex mb-2" style="flex-direction: row;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -132,7 +137,7 @@
 
             <!-- Card 5: Entries -->
             <div class="col-12 col-md-4">
-            <div class="card">
+            <div class="card" id="entriesCard">
                 <div class="top d-flex mb-2" style="flex-direction: row;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -151,7 +156,7 @@
 
             <!-- Card 6: Exceptions -->
             <div class="col-12 col-md-4">
-            <div class="card">
+            <div class="card" id="exceptionsCard">
                 <div class="top d-flex mb-2" style="flex-direction: row;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -163,7 +168,7 @@
                 </div>
 
                 <div class="my-2">
-                    <span class="scope1">0</span>
+                    <span class="scope1" id="exceptionsValue">0</span>
                 </div>
             </div>
             </div>
@@ -196,8 +201,8 @@
                         </div>
                     </div>
                     <div class="my-2">
-                        <div class="emission-value" id="emissionValue">5.10 tCO₂e</div>
-                        <span class="emission-percentage">(20.6% of total)</span>
+                        <div class="emission-value" id="fuelEnergyValue">5.10 tCO₂e</div>
+                        <span class="emission-percentage" id="fuelEnergyValueTotal">(20.6% of total)</span>
                     </div>
                     <p class="emission-description">Calculate emissions from boilers, generators, and other fixed equipment.</p>
                     <button class="emission-add-btn" data-bs-toggle="modal" data-bs-target="#entryModeModal" data-category="fuel-energy">+ Add Entry</button>
@@ -218,8 +223,8 @@
                         </div>
                     </div>
                     <div class="my-2">
-                        <div class="emission-value" id="emissionValue">2.04 tCO₂e</div>
-                        <span class="emission-percentage">(8.2% of total)</span>
+                        <div class="emission-value" id="companyVehiclesValue">2.04 tCO₂e</div>
+                        <span class="emission-percentage" id="companyVehiclesValueTotal">(8.2% of total)</span>
                     </div>
                     <p class="emission-description">Calculate emissions from vehicles, forklifts, and mobile equipment.</p>
                     <button class="emission-add-btn" data-bs-toggle="modal" data-bs-target="#entryModeModal" data-category="vehicles">+ Add Entry</button>
@@ -239,8 +244,8 @@
                         </div>
                     </div>
                     <div class="my-2">
-                        <div class="emission-value" id="emissionValue">3.15 tCO₂e</div>
-                        <span class="emission-percentage">(12.7% of total)</span>
+                        <div class="emission-value" id="productionProcessesValue">3.15 tCO₂e</div>
+                        <span class="emission-percentage" id="productionProcessesValueTotal">(12.7% of total)</span>
                     </div>
                     <p class="emission-description">Calculate emissions from industrial processes and chemical reactions.</p>
                     <button class="emission-add-btn" data-bs-toggle="modal" data-bs-target="#entryModeModal" data-category="production-processes">+ Add Entry</button>
@@ -260,8 +265,8 @@
                         </div>
                     </div>
                     <div class="my-2">
-                        <div class="emission-value" id="emissionValue">14.46 tCO₂e</div>
-                        <span class="emission-percentage">(58.4% of total)</span>
+                        <div class="emission-value" id="refrigerationLeaksValue">14.46 tCO₂e</div>
+                        <span class="emission-percentage" id="refrigerationLeaksValueTotal">(58.4% of total)</span>
                     </div>
                     <p class="emission-description">Calculate emissions from refrigerant leaks and other fugitive sources.</p>
                     <button class="emission-add-btn" data-bs-toggle="modal" data-bs-target="#entryModeModal" data-category="refrigeration-leaks">+ Add Entry</button>
@@ -433,6 +438,63 @@
             <p class="methodology-footer mb-0">
                 © 2025 Carbon AI. This tool helps organizations calculate Scope 1 emissions following international standards. Consult environmental professionals for official reporting.
             </p>
+        </div>
+    </div>
+
+    <!-- Manage Overview Cards Modal -->
+    <div class="modal fade" id="manageCardsModal" tabindex="-1" aria-labelledby="manageCardsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <div class="modal-header border-0 pb-3" style="padding: 1.5rem 1.5rem 0.75rem;">
+                    <h5 class="modal-title" id="manageCardsModalLabel" style="font-size: 1.25rem; font-weight: 600; color: #111827; margin: 0 auto;">Manage Overview Cards</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin: 0;"></button>
+                </div>
+                <div class="modal-body px-5">
+                    <div class="d-flex flex-column" style="gap: 1rem;" id="cardsListContainer">
+                        <div class="form-check card-filter-item" style="display: flex; align-items: center; padding: 0.75rem 0;" data-card-name="Total Scope 1 tCO₂e">
+                            <input class="form-check-input" type="checkbox" id="cardTotalScope1" checked style="width: 18px; height: 18px; margin-top: 0; cursor: pointer;">
+                            <label class="form-check-label" for="cardTotalScope1" style="margin-left: 0.75rem; font-size: 1rem; color: #111827; cursor: pointer; flex: 1;">
+                                Total Scope 1 tCO₂e
+                            </label>
+                        </div>
+                        <div class="form-check card-filter-item" style="display: flex; align-items: center; padding: 0.75rem 0;" data-card-name="Target vs Actual">
+                            <input class="form-check-input" type="checkbox" id="cardTargetVsActual" checked style="width: 18px; height: 18px; margin-top: 0; cursor: pointer;">
+                            <label class="form-check-label" for="cardTargetVsActual" style="margin-left: 0.75rem; font-size: 1rem; color: #111827; cursor: pointer; flex: 1;">
+                                Target vs Actual
+                            </label>
+                        </div>
+                        <div class="form-check card-filter-item" style="display: flex; align-items: center; padding: 0.75rem 0;" data-card-name="Intensity per Revenue">
+                            <input class="form-check-input" type="checkbox" id="cardIntensityPerRevenue" checked style="width: 18px; height: 18px; margin-top: 0; cursor: pointer;">
+                            <label class="form-check-label" for="cardIntensityPerRevenue" style="margin-left: 0.75rem; font-size: 1rem; color: #111827; cursor: pointer; flex: 1;">
+                                Intensity per Revenue
+                            </label>
+                        </div>
+                        <div class="form-check card-filter-item" style="display: flex; align-items: center; padding: 0.75rem 0;" data-card-name="Data Confidence">
+                            <input class="form-check-input" type="checkbox" id="cardDataConfidence" checked style="width: 18px; height: 18px; margin-top: 0; cursor: pointer;">
+                            <label class="form-check-label" for="cardDataConfidence" style="margin-left: 0.75rem; font-size: 1rem; color: #111827; cursor: pointer; flex: 1;">
+                                Data Confidence
+                            </label>
+                        </div>
+                        <div class="form-check card-filter-item" style="display: flex; align-items: center; padding: 0.75rem 0;" data-card-name="Entries">
+                            <input class="form-check-input" type="checkbox" id="cardEntries" checked style="width: 18px; height: 18px; margin-top: 0; cursor: pointer;">
+                            <label class="form-check-label" for="cardEntries" style="margin-left: 0.75rem; font-size: 1rem; color: #111827; cursor: pointer; flex: 1;">
+                                Entries
+                            </label>
+                        </div>
+                        <div class="form-check card-filter-item" style="display: flex; align-items: center; padding: 0.75rem 0;" data-card-name="Exceptions">
+                            <input class="form-check-input" type="checkbox" id="cardExceptions" checked style="width: 18px; height: 18px; margin-top: 0; cursor: pointer;">
+                            <label class="form-check-label" for="cardExceptions" style="margin-left: 0.75rem; font-size: 1rem; color: #111827; cursor: pointer; flex: 1;">
+                                Exceptions
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0" style="padding: 0 1.5rem 1.5rem;">
+                    <button type="button" class="btn w-100" id="doneManageCardsBtn" style="background-color: #14b8a6; color: #fff; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 500; font-size: 1rem;">
+                        Done
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -884,6 +946,81 @@ let selectedCategory = 'fuel-energy';
 
     // Initialize validation when modal is shown
 document.addEventListener('DOMContentLoaded', function() {
+    // Manage Cards Modal functionality
+    const manageCardsModal = document.getElementById('manageCardsModal');
+    const doneManageCardsBtn = document.getElementById('doneManageCardsBtn');
+
+    // Card checkbox IDs and their corresponding card container IDs
+    const cardMapping = {
+        'cardTotalScope1': 'totalScope1Card',
+        'cardTargetVsActual': 'targetVsActualCard',
+        'cardIntensityPerRevenue': 'intensityPerRevenueCard',
+        'cardDataConfidence': 'dataConfidenceCard',
+        'cardEntries': 'entriesCard',
+        'cardExceptions': 'exceptionsCard'
+    };
+
+    // Function to toggle card visibility
+    function toggleCardVisibility(checkboxId, cardId) {
+        const checkbox = document.getElementById(checkboxId);
+        const cardElement = document.getElementById(cardId);
+
+        if (checkbox && cardElement) {
+            const cardContainer = cardElement.closest('.col-12.col-md-4');
+            if (cardContainer) {
+                if (checkbox.checked) {
+                    cardContainer.style.display = '';
+                } else {
+                    cardContainer.style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // Add event listeners to all checkboxes for real-time visibility toggle
+    Object.keys(cardMapping).forEach(checkboxId => {
+        const checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.addEventListener('change', function() {
+                const cardId = cardMapping[checkboxId];
+                toggleCardVisibility(checkboxId, cardId);
+            });
+        }
+    });
+
+    // Handle Done button click - just close the modal
+    if (doneManageCardsBtn) {
+        doneManageCardsBtn.addEventListener('click', function() {
+            // Close the modal
+            const modalInstance = bootstrap.Modal.getInstance(manageCardsModal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        });
+    }
+
+    // Filter cards in Manage Cards Modal
+    const cardFilterInput = document.getElementById('cardFilterInput');
+    const cardFilterItems = document.querySelectorAll('.card-filter-item');
+
+    if (cardFilterInput && cardFilterItems.length > 0) {
+        cardFilterInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            cardFilterItems.forEach(item => {
+                const cardName = item.getAttribute('data-card-name') || '';
+                const label = item.querySelector('label');
+                const labelText = label ? label.textContent.toLowerCase() : '';
+
+                if (searchTerm === '' || cardName.toLowerCase().includes(searchTerm) || labelText.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+
     const fuelEnergyModal = document.getElementById('fuelEnergyModal');
     const vehicleModal = document.getElementById('vehicleModal');
     const productionProcessesModal = document.getElementById('productionProcessesModal');

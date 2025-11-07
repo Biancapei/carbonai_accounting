@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/scope1', function () {
     return view('scope1');
 });
+
+Route::get('/scope2', function () {
+    return view('scope2');
+});
