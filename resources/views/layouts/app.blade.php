@@ -110,6 +110,17 @@
                     </svg>
                     <span>Help</span>
                 </a>
+                @auth
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="nav-menu-item logout-button">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V3m9 9a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Sign out</span>
+                    </button>
+                </form>
+                @endauth
             </div>
         </aside>
 
