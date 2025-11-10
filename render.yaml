@@ -38,6 +38,12 @@ services:
         fromDatabase:
           name: carbonai-db
           property: password
+      - key: GOOGLE_CLIENT_ID
+        fromSecret: google-client-id
+      - key: GOOGLE_CLIENT_SECRET
+        fromSecret: google-client-secret
+      - key: GOOGLE_REDIRECT_URI
+        value: https://carbonai-accounting.onrender.com/auth/google/callback
 
 databases:
   - name: carbonai-db
