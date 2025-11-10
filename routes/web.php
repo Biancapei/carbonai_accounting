@@ -9,6 +9,11 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/password/forgot', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+    Route::post('/password/forgot', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/password/reset/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+    Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::get('/auth/google', function () {

@@ -1,47 +1,70 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+    <title>{{ config('app.name', 'Laravel') }} - Reset Password</title>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+    <!-- Auth CSS -->
+    <link rel="stylesheet" href="{{ (request()->secure() || app()->environment('production')) ? secure_asset('css/auth.css') : asset('css/auth.css') }}">
+</head>
+<body class="auth-body auth-login">
+    <div class="auth-container">
+        <div class="logo">CarbonAI</div>
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+        <h1 class="auth-title mt-2">Reset your password</h1>
+        <p class="auth-subtitle">We’ll send a link to the email you registered with.</p>
 
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
             </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.email') }}">
+            @csrf
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email address</label>
+                <input id="email"
+                       type="email"
+                       class="form-control @error('email') is-invalid @enderror"
+                       name="email"
+                       value="{{ old('email') }}"
+                       placeholder="name@company.com"
+                       required
+                       autocomplete="email"
+                       autofocus>
+                @error('email')
+                    <div class="invalid-feedback d-block">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-register w-100">
+                Send reset link
+            </button>
+        </form>
+
+        <div class="login-link mt-4">
+            <a href="{{ route('login') }}">Back to sign in</a>
         </div>
     </div>
-</div>
-@endsection
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
