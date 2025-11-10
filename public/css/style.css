@@ -388,7 +388,6 @@ body {
 
 .chat-timestamp {
     display: inline-block;
-    margin-top: 20px;
     font-size: 0.7rem;
     color: rgba(224, 231, 255, 0.5);
 }
