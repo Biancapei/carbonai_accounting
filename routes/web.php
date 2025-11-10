@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\SocialController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -16,13 +17,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
-Route::get('/auth/google', function () {
-    return redirect()->route('login')->with('error', 'Google authentication is not configured yet.');
-})->name('auth.google');
-
-Route::get('/auth/microsoft', function () {
-    return redirect()->route('login')->with('error', 'Microsoft authentication is not configured yet.');
-})->name('auth.microsoft');
+Route::get('/auth/google', [SocialController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialController::class, 'handleGoogleCallback']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
