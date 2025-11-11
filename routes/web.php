@@ -25,6 +25,8 @@ Route::get('/auth/microsoft/callback', [SocialController::class, 'handleMicrosof
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
+Route::get('/debug/microsoft-config', fn () => config('services.microsoft'));
+
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return view('home');
