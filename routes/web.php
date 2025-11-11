@@ -20,9 +20,8 @@ Route::middleware('guest')->group(function () {
 Route::get('/auth/google', [SocialController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [SocialController::class, 'handleGoogleCallback']);
 
-Route::get('/auth/microsoft', function () {
-    return redirect()->route('login')->with('error', 'Microsoft authentication is not configured yet.');
-})->name('auth.microsoft');
+Route::get('/auth/microsoft', [SocialController::class, 'redirectToMicrosoft'])->name('auth.microsoft');
+Route::get('/auth/microsoft/callback', [SocialController::class, 'handleMicrosoftCallback']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
