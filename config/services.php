@@ -40,7 +40,7 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env(
             'GOOGLE_REDIRECT_URI',
-            rtrim(config('app.url', 'https://carbonai-accounting.onrender.com'), '/') . '/auth/google/callback'
+            rtrim(env('APP_URL', 'https://carbonai-accounting.onrender.com'), '/') . '/auth/google/callback'
         ),
     ],
 
