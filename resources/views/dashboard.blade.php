@@ -453,12 +453,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Card checkbox IDs and their corresponding card container IDs
     const cardMapping = {
-        'cardTotalEmissions': 'totalEmissionsCard',
-        'cardScopeBreakdown': 'scopeBreakdownCard',
-        'cardEntriesSummary': 'entriesSummaryCard',
-        'cardDataConfidence': 'dataConfidenceCard',
-        'cardEmissionIntensity': 'emissionIntensityCard',
-        'cardExceptions': 'exceptionsCard'
+        cardTotalEmissions: 'totalEmissionsCard',
+        cardScopeBreakdown: 'scopeBreakdownCard',
+        cardEntriesSummary: 'entriesSummaryCard',
+        cardDataConfidence: 'dataConfidenceOverallCard',
+        cardEmissionIntensity: 'emissionIntensityCard',
+        cardExceptions: 'exceptionsCard'
     };
 
     // Function to toggle card visibility
@@ -482,6 +482,9 @@ document.addEventListener('DOMContentLoaded', function() {
     Object.keys(cardMapping).forEach(checkboxId => {
         const checkbox = document.getElementById(checkboxId);
         if (checkbox) {
+            // Sync current state on load
+            toggleCardVisibility(checkboxId, cardMapping[checkboxId]);
+
             checkbox.addEventListener('change', function() {
                 const cardId = cardMapping[checkboxId];
                 toggleCardVisibility(checkboxId, cardId);
@@ -522,6 +525,114 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Filter Panel Toggle and Table Filtering
+    const filterToggleBtn = document.getElementById('filterToggleBtn');
+    const filterPanel = document.getElementById('filterPanel');
+    const clearFilters = document.getElementById('clearFilters');
+    const filterCategory = document.getElementById('filterCategory');
+    const filterScope = document.getElementById('filterScope');
+    const filterCO2 = document.getElementById('filterCO2');
+    const filterSource = document.getElementById('filterSource');
+    const filterStatus = document.getElementById('filterStatus');
+    const tableBody = document.querySelector('.all-entries table tbody');
+
+    if (filterToggleBtn && filterPanel) {
+        filterToggleBtn.addEventListener('click', function() {
+            filterPanel.classList.toggle('hidden');
+        });
+    }
+
+    function filterTable() {
+        if (!tableBody) {
+            return;
+        }
+
+        const categoryValue = filterCategory ? filterCategory.value.toLowerCase() : '';
+        const scopeValue = filterScope ? filterScope.value : '';
+        const co2Value = filterCO2 ? filterCO2.value : '';
+        const sourceValue = filterSource ? filterSource.value : '';
+        const statusValue = filterStatus ? filterStatus.value : '';
+
+        const rows = tableBody.querySelectorAll('tr');
+
+        rows.forEach(row => {
+            let showRow = true;
+
+            if (categoryValue) {
+                const categoryCell = row.cells[0];
+                if (!categoryCell || categoryCell.textContent.trim().toLowerCase() !== categoryValue) {
+                    showRow = false;
+                }
+            }
+
+            if (showRow && scopeValue) {
+                const scopeCell = row.cells[1];
+                if (!scopeCell || scopeCell.textContent.trim() !== scopeValue) {
+                    showRow = false;
+                }
+            }
+
+            if (showRow && sourceValue) {
+                const sourceCell = row.cells[2];
+                if (!sourceCell || sourceCell.textContent.trim() !== sourceValue) {
+                    showRow = false;
+                }
+            }
+
+            if (showRow && co2Value) {
+                const co2Cell = row.cells[3];
+                if (co2Cell) {
+                    const co2Text = co2Cell.textContent.trim();
+                    const co2Number = parseFloat(co2Text.replace(' tCO₂e', ''));
+
+                    if (!isNaN(co2Number)) {
+                        if (co2Value === 'low' && !(co2Number >= 0 && co2Number < 2)) {
+                            showRow = false;
+                        } else if (co2Value === 'medium' && !(co2Number >= 2 && co2Number < 5)) {
+                            showRow = false;
+                        } else if (co2Value === 'high' && co2Number < 5) {
+                            showRow = false;
+                        }
+                    } else {
+                        showRow = false;
+                    }
+                }
+            }
+
+            if (showRow && statusValue) {
+                const statusCell = row.cells[4];
+                if (statusCell) {
+                    const badge = statusCell.querySelector('.badge');
+                    if (!badge || badge.textContent.trim() !== statusValue) {
+                        showRow = false;
+                    }
+                }
+            }
+
+            row.style.display = showRow ? '' : 'none';
+        });
+    }
+
+    [filterCategory, filterScope, filterCO2, filterSource, filterStatus].forEach(control => {
+        if (control) {
+            control.addEventListener('change', filterTable);
+        }
+    });
+
+    if (clearFilters) {
+        clearFilters.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (filterCategory) filterCategory.value = '';
+            if (filterScope) filterScope.value = '';
+            if (filterCO2) filterCO2.value = '';
+            if (filterSource) filterSource.value = '';
+            if (filterStatus) filterStatus.value = '';
+            filterTable();
+        });
+    }
+
+    filterTable();
+
     const fuelEnergyModal = document.getElementById('fuelEnergyModal');
     const vehicleModal = document.getElementById('vehicleModal');
     const productionProcessesModal = document.getElementById('productionProcessesModal');
@@ -561,7 +672,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-}
+});
 </script>
 @endsection
 

@@ -22,7 +22,7 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.insight h2, .analysis h2, .all-entries h2 {
+.overview h2, .insight h2, .analysis h2, .all-entries h2 {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 1rem;
