@@ -24,7 +24,7 @@
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body class="bg-white font-sans antialiased">
+<body">
     <div class="flex min-h-screen">
         <!-- Left Sidebar -->
         <aside class="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-screen">
@@ -45,7 +45,7 @@
                 </a>
 
                 <!-- Dashboard -->
-                <a href="#" class="nav-menu-item">
+                <a href="/dashboard" class="nav-menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
@@ -70,15 +70,21 @@
 
                 <!-- Scopes Section -->
                 <div class="pt-4 mt-4 border-t border-gray-200">
-                    <button class="flex items-center justify-between w-full px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg group">
+                    <button
+                        id="scopeMenuToggle"
+                        type="button"
+                        class="flex items-center justify-between w-full px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg group"
+                        aria-controls="scopeMenuList"
+                        aria-expanded="true"
+                    >
                         <span class="nav-link">Scopes</span>
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
 
                     <!-- Scope Items -->
-                    <div class="mt-2 space-y-1 pl-3">
+                    <div id="scopeMenuList" class="mt-2 space-y-1 pl-3">
                         <a href="/scope1" class="nav-scope-item {{ request()->is('scope1') ? 'active' : '' }}">
                             <div class="nav-scope-item-title">Scope 1</div>
                             <div class="nav-scope-item-subtitle">Direct Emissions</div>
@@ -133,8 +139,32 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const scopeToggle = document.getElementById('scopeMenuToggle');
+            const scopeList = document.getElementById('scopeMenuList');
+            const scopeIcon = scopeToggle?.querySelector('svg');
+
+            if (scopeToggle && scopeList) {
+                const syncState = () => {
+                    const isHidden = scopeList.classList.contains('hidden');
+                    scopeToggle.setAttribute('aria-expanded', (!isHidden).toString());
+                    if (scopeIcon) {
+                        scopeIcon.classList.toggle('rotate-180', !isHidden);
+                    }
+                };
+
+                scopeToggle.addEventListener('click', () => {
+                    scopeList.classList.toggle('hidden');
+                    syncState();
+                });
+
+                syncState();
+            }
+        });
+    </script>
+
     <!-- Page-specific scripts -->
     @stack('scripts')
 </body>
 </html>
-

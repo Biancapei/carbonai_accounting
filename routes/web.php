@@ -25,12 +25,14 @@ Route::get('/auth/microsoft/callback', [SocialController::class, 'handleMicrosof
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/debug/microsoft-config', fn () => config('services.microsoft'));
-
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return view('home');
     })->name('home');
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
 
     Route::get('/scope1', function () {
         return view('scope1');
